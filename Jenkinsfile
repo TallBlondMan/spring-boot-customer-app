@@ -7,7 +7,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + "-v gradle_dep:/gradle/cache") {
+                    docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + " -v gradle_dep:/gradle/cache") {
                         dir (path: '/home/jenkins_2/workspace/devopserka/customer-api'){
                             sh 'pwd'
                             sh 'gradle clean bootJar --info'
