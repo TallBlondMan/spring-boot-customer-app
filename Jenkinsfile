@@ -6,7 +6,7 @@ pipeline {
                 docker { 
                     image 'gradle:8.2-alpine'
                     args [
-                        '-u root'
+                        '-u root',
                         '-e GRADLE_USER_HOME=/gradle/cache',
                         '-v gradle_dep:/gradle/cache'
                     ]
