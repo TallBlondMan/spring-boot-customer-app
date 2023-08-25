@@ -16,5 +16,30 @@ pipeline {
                 }
             }
         }
+        stage('QWASP') {
+            steps {
+                echo 'QWASP'
+            }
+        }
+        stage('SonarQube') {
+            steps {
+                echo 'SonarQube'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'App Test'
+            }
+        }
+        stage ('Push') {
+            steps {
+                echo 'Push to docker'
+            }
+        }
+        stage ('Deploy') {
+            steps {
+                echo 'deploy to docker container'
+            }
+        }
     }
 }
