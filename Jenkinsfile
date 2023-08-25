@@ -14,6 +14,7 @@ pipeline {
                     sh 'pwd'
                     sh 'gradle clean bootJar --info'
                 }
+                sh 'ls -l'
             }
         }
     }
