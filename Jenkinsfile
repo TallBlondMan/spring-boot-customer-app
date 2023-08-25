@@ -11,6 +11,7 @@ pipeline {
                         dir (path: '/home/jenkins_2/workspace/devopserka/customer-api'){
                             sh 'pwd'
                             sh 'gradle clean bootJar --info'
+                        }
                     }
                 }
             }
