@@ -2,12 +2,15 @@ pipeline {
     agent none
     stages {
         stage('Build') {
-            node {
-                checkout scm 
-                docker.image('gradle:8.2-alpine').withRun('-v gradle_dep:/gradle/cache' + '-v "$PWD/customer-api":/home/gradle/project') {
-                    sh 'gradle clean bootJar --info'
+            steps {
+                node {
+                    checkout scm 
+                    docker.image('gradle:8.2-alpine').withRun('-v gradle_dep:/gradle/cache' + '-v "$PWD/customer-api":/home/gradle/project') {
+                        sh 'gradle clean bootJar --info'
+                    }
                 }
             }
+           
             // agent {
             //     docker { 
             //         image 'gradle:8.2-alpine'
