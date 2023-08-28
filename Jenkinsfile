@@ -20,12 +20,12 @@ pipeline {
                 echo "************* Spin-UP MySQL database and test backend *************"
             }
         }
-        stage('QWASP') {
+        stage('OWASP') {
             steps {
                 dir (path: "$WORKSPACE/customer-api"){
                     dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true
                 }
-                dependencyCheckPublisher pattern: "$WORKSPACE/customer-api/dep-check-report.xml"
+                dependencyCheckPublisher pattern: "**/dependency-check-report.xml"
             }
         }
         stage('SonarQube') {
