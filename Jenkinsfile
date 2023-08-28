@@ -20,7 +20,7 @@ pipeline {
                 echo "******************* Spin-UP MySQL database and test backend *******************"
                 script {
                     dir (path: "$WORKSPACE/customer-api") {
-                        def backendImage = docker.build("backend-api:${BUILD_ID}", "-f Dockerfile.app")
+                        def backendImage = docker.build("backend-api:${BUILD_ID}", "-f Dockerfile.app .")
                     }
                     
                 }
