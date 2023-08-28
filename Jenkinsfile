@@ -22,6 +22,9 @@ pipeline {
             }
         }
         stage('QWASP') {
+            agent {
+                label 'builder'
+            }
             steps {
                 dir (path: "$WORKSPACE/customer-api"){
                     dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true
