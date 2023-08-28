@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Build backend') {
             steps {
-                echo "************* Building FrontEnd *************"
+                echo "******************* Building FrontEnd *******************"
                 script {
                     docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + " -v gradle_dep:/gradle/cache") {
                         dir (path: "$WORKSPACE/customer-api"){
@@ -17,11 +17,12 @@ pipeline {
         }
         stage ('Test backend') {
             steps {
-                echo "************* Spin-UP MySQL database and test backend *************"
+                echo "******************* Spin-UP MySQL database and test backend *******************"
             }
         }
         stage('OWASP') {
             steps {
+                echo "******************* Checking dependencies with OWASP *******************"
                 dir (path: "$WORKSPACE/customer-api"){
                     dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true
                 }
@@ -30,22 +31,22 @@ pipeline {
         }
         stage('SonarQube') {
             steps {
-                echo 'SonarQube'
+                echo '******************* SonarQube analize *******************'
             }
         }
         stage('Test') {
             steps {
-                echo 'App Test'
+                echo '******************* SpringBoot Test *******************'
             }
         }
         stage ('Push') {
             steps {
-                echo 'Push to docker'
+                echo '******************* Push to docker *******************'
             }
         }
         stage ('Deploy') {
             steps {
-                echo 'deploy to docker container'
+                echo '******************* Deploy the Docker container *******************'
             }
         }
     }
