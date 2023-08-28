@@ -25,7 +25,7 @@ pipeline {
                 dir (path: "$WORKSPACE/customer-api"){
                     dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true
                 }
-                dependencyCheckPublisher pattern: '$WORKSPACE/customer-api/dep-check-report.xml'
+                dependencyCheckPublisher pattern: "$WORKSPACE/customer-api/dep-check-report.xml"
             }
         }
         stage('SonarQube') {
