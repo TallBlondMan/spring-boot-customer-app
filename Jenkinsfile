@@ -24,7 +24,7 @@ pipeline {
         stage('QWASP') {
             steps {
                 dir (path: "$WORKSPACE/customer-api"){
-                    sh "dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true"
+                    dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true
                 }
             }
         }
