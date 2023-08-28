@@ -1,7 +1,7 @@
 pipeline {
     agent none
     stages {
-        stage('Build') {
+        stage('Build backend') {
             agent {
                 label 'builder'
             }
@@ -15,9 +15,14 @@ pipeline {
                 }
             }
         }
+        stage ('Test backend') {
+
+        }
         stage('QWASP') {
             steps {
-                echo 'QWASP'
+                dir (path: "$WORKSPACE/customer-api"){
+                    sh "dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true"
+                }
             }
         }
         stage('SonarQube') {
