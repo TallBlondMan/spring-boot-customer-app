@@ -1,10 +1,9 @@
 pipeline {
-    agent none
+        agent {
+            label 'builder'
+        }
     stages {
         stage('Build backend') {
-            agent {
-                label 'builder'
-            }
             steps {
                 echo "************* Building FrontEnd *************"
                 script {
@@ -22,9 +21,6 @@ pipeline {
             }
         }
         stage('QWASP') {
-            agent {
-                label 'builder'
-            }
             steps {
                 dir (path: "$WORKSPACE/customer-api"){
                     dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true
