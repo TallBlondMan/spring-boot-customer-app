@@ -40,10 +40,10 @@ pipeline {
                     // Start a sidecar MySQL database for Spring tests
                     docker.image('mysql:latest').withRun("-e MYSQL_ALLOW_EMPTY_PASSWORD=True" + 
                                                             " --network temp" + 
-                                                            " --name databse" + 
+                                                            " --name database" + 
                                                             " -p 3306:3306") { 
                         // Run test to check if MySQL is UP
-                        sh 'while ! mysqladmin ping -h localhost; do sleep 5; done'
+                        sh 'until curl -sSf http://database:3306; do echo "Waiting for MySQL to start..."; sleep 5; done'
                     }
                     // Run the app for Spring tests
                     docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
