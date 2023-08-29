@@ -3,6 +3,7 @@ pipeline {
             label 'builder'
         }
         environment {
+            // Secret data for DB setup and connection
             DB_USER = credentials('DB_User')
             DB_PASSWD = credentials('DB_password')
             DB_ROOT = credentials('DB_Root_Password')
@@ -12,12 +13,13 @@ pipeline {
             steps {
                 echo "******************* Building FrontEnd *******************"
                 script {
+                    // Building the image with gradle container
                     docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + " -v gradle_dep:/gradle/cache") {
                         dir (path: "$WORKSPACE/customer-api"){
                             sh 'gradle clean bootJar --info'
                         }
                     }
-                    // Added to build stage
+                    // Building the Docker image for later test and deployment
                     dir (path: "$WORKSPACE/customer-api"){
                         def backendImage = docker.build("backend-api:${BUILD_ID}")
                     }
@@ -26,10 +28,12 @@ pipeline {
         }
         stage('OWASP') {
             steps {
+                // Check dependencies for vulnerabilities 
                 echo "******************* Checking dependencies with OWASP *******************"
                 dir (path: "$WORKSPACE/customer-api"){
                     dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true
                 }
+                // Catching the file and posting the results
                 dependencyCheckPublisher pattern: "**/dependency-check-report.xml"
             }
         }
@@ -43,8 +47,9 @@ pipeline {
                                                             " --name database" + 
                                                             " -p 3306:3306") { 
                         // Run test to check if MySQL is UP
-                        sh 'until curl -sf http://database:3306 --output /dev/null; do sleep 5; done'
+                        //sh 'until curl -sSf http://database:3306; do sleep 5; done'
                     }
+                    sh 'while ! nc -zv localhost 3306; do sleep 5; done'
                     // Run the app for Spring tests
                     docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
                                                                     " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
