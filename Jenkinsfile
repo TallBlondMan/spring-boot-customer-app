@@ -42,7 +42,7 @@ pipeline {
                 echo "******************* Spin-UP MySQL database and test backend *******************"
                 script {
                     // Start a sidecar MySQL database for Spring tests
-                    docker.image('mysql:latest').withRun("-e MYSQL_ALLOW_EMPTY_PASSWORD=True" + 
+                    docker.image('mysql:latest').run("-e MYSQL_ALLOW_EMPTY_PASSWORD=True" + 
                                                             " --network temp" + 
                                                             " --name database" + 
                                                             " -p 3306:3306") { 
