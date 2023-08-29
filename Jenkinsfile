@@ -43,7 +43,10 @@ pipeline {
                                                         ' -e MYSQL_DATABASE=customerdb' + 
                                                         " -p 3306:3306" + 
                                                         " --name database")
-                    docker.image("backend-api:${BUILD_ID}").inside("----network temp" + 
+                    docker.image('mysql:latest').inside("--natwork temp") {
+                        sh 'while ! mysqladmin -h database:3306; do sleep 3; done'
+                    }
+                    docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
                                                                     " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
                                                                     ' -e SPRING_DATASOURCE_USERNAME=$DB_USER' + 
                                                                     ' -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD' + 
