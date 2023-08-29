@@ -80,7 +80,7 @@ pipeline {
     post {
         always {
             echo '******************* CLEANING UP *******************'
-            script {dumySQL.stop()}
+            sh "docker ps -a | awk '{print \$1}' | xargs -r docker rm -f"
         }
     }
 }
