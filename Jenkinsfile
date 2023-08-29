@@ -50,7 +50,9 @@ pipeline {
                                                                     " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
                                                                     ' -e SPRING_DATASOURCE_USERNAME=root' + 
                                                                     ' -e SPRING_DATASOURCE_PASSWORD=' + 
-                                                                    " -p 8081:8080")
+                                                                    " -p 8081:8080") {
+                        sh 'java -jar app.jar'
+                    }
                     // dir (path: "$WORKSPACE/customer-api") {
                     //     def backendImage = docker.build("backend-api:${BUILD_ID}")
                     // }
