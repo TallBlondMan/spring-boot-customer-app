@@ -18,7 +18,9 @@ pipeline {
                         }
                     }
                     // Added to build stage
-                    def backendImage = docker.build("backend-api:${BUILD_ID}")
+                    dir (path: "$WORKSPACE/customer-api"){
+                        def backendImage = docker.build("backend-api:${BUILD_ID}")
+                    }
                 }
             }
         }
