@@ -53,7 +53,6 @@ pipeline {
                                                                     " -dp 8081:8080") {
                         sh 'java -jar app.jar'
                     }
-                    dumySQL.stop()
                 }
             }
         }
@@ -75,6 +74,14 @@ pipeline {
         stage ('Deploy') {
             steps {
                 echo '******************* Deploy the Docker container *******************'
+            }
+        }
+    }
+    post {
+        always {
+            echo '******************* CLEANING UP *******************'
+            script {
+                dumySQL.stop()
             }
         }
     }
