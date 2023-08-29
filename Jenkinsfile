@@ -43,7 +43,7 @@ pipeline {
                                                             " --name database" + 
                                                             " -p 3306:3306") { 
                         // Run test to check if MySQL is UP
-                        sh 'while ! curl -sf http://localhost:3306 --output /dev/null; do sleep 5; done'
+                        sh 'until curl -sf http://database:3306 --output /dev/null; do sleep 5; done'
                     }
                     // Run the app for Spring tests
                     docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
