@@ -36,7 +36,7 @@ pipeline {
                     dir (path: "$WORKSPACE/customer-api") {
                         def backendImage = docker.build("backend-api:${BUILD_ID}")
                     }
-                    docker.image('mysql:latest').run("--network temp" + 
+                    def dumySQL = docker.image('mysql:latest').run("--network temp" + 
                                                         ' -e MYSQL_ROOT_PASSWORD=$DB_ROOT' + 
                                                         ' -e MYSQL_USER=$DB_USER' + 
                                                         ' -e MYSQL_PASSWORD=$DB_PASSWD' + 
@@ -53,6 +53,7 @@ pipeline {
                                                                     " -dp 8081:8080") {
                         sh 'java -jar app.jar'
                     }
+                    dumySQL.stop()
                 }
             }
         }
