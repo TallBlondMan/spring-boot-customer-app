@@ -36,7 +36,7 @@ pipeline {
                     dir (path: "$WORKSPACE/customer-api") {
                         def backendImage = docker.build("backend-api:${BUILD_ID}")
                     }
-                    docker.image('mysql:latest').inside("--network temp" + 
+                    docker.image('mysql:latest').withRun("--network temp" + 
                                                         " -e MYSQL_ROOT_PASSWORD=$DB_ROOT" + 
                                                         " -e MYSQL_USER=$DB_USER" + 
                                                         " -e MYSQL_PASSWORD=$DB_PASSWD" + 
