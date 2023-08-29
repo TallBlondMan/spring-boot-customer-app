@@ -43,7 +43,7 @@ pipeline {
                                                         ' -e MYSQL_DATABASE=customerdb' + 
                                                         " -p 3306:3306" + 
                                                         " --name database")
-                    docker.image('mysql:latest').inside("--natwork temp") {
+                    docker.image('mysql:latest').inside("--network temp") {
                         sh 'while ! mysqladmin -h database:3306; do sleep 3; done'
                     }
                     docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
