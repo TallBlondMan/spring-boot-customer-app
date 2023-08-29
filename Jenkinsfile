@@ -53,6 +53,7 @@ pipeline {
                                                                         " -dp 8081:8080") {
                             sh 'java -jar app.jar'
                         }
+                    }
                 }
             }
         }
