@@ -36,23 +36,19 @@ pipeline {
                     dir (path: "$WORKSPACE/customer-api") {
                         def backendImage = docker.build("backend-api:${BUILD_ID}")
                     }
-                    docker.image('mysql:latest').withRun("--network temp" + 
-                                                        " -e MYSQL_ROOT_PASSWORD=$DB_ROOT" + 
-                                                        " -e MYSQL_USER=$DB_USER" + 
-                                                        " -e MYSQL_PASSWORD=$DB_PASSWD" + 
-                                                        " -e MYSQL_DATABASE=customerdb" + 
+                    docker.image('mysql:latest').run("--network temp" + 
+                                                        ' -e MYSQL_ROOT_PASSWORD=$DB_ROOT' + 
+                                                        ' -e MYSQL_USER=$DB_USER' + 
+                                                        ' -e MYSQL_PASSWORD=$DB_PASSWD' + 
+                                                        ' -e MYSQL_DATABASE=customerdb' + 
                                                         " -p 3306:3306" + 
-                                                        " --name database") {
-                            sh ' while ! mysqladmin ping -h customerdb --silent; do sleep 3; done'
-                            sh '**************** DB is UP **********************'
-
-                        docker.image("backend-api:${BUILD_ID}").inside("----network temp" + 
-                                                                        " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
-                                                                        " -e SPRING_DATASOURCE_USERNAME=$DB_USER" + 
-                                                                        " -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD" + 
-                                                                        " -dp 8081:8080") {
-                            sh 'java -jar app.jar'
-                        }
+                                                        " --name database")
+                    docker.image("backend-api:${BUILD_ID}").inside("----network temp" + 
+                                                                    " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
+                                                                    ' -e SPRING_DATASOURCE_USERNAME=$DB_USER' + 
+                                                                    ' -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD' + 
+                                                                    " -dp 8081:8080") {
+                        sh 'java -jar app.jar'
                     }
                 }
             }
