@@ -80,7 +80,7 @@ pipeline {
     post {
         always {
             echo '******************* CLEANING UP *******************'
-                dumySQL.stop()
+            script {dumySQL.stop()}
         }
     }
 }
