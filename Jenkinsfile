@@ -44,7 +44,7 @@ pipeline {
                                                         " -p 3306:3306" + 
                                                         " --name database")
                     docker.image('mysql:latest').inside("--network temp") {
-                        sh 'while ! mysqladmin -h database:3306; do sleep 3; done'
+                        sh 'while ! mysqladmin ping -h database; do sleep 3; done'
                     }
                     docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
                                                                     " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
@@ -80,9 +80,7 @@ pipeline {
     post {
         always {
             echo '******************* CLEANING UP *******************'
-            script {
                 dumySQL.stop()
-            }
         }
     }
 }
