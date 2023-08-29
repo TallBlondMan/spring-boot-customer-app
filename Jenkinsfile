@@ -41,7 +41,7 @@ pipeline {
                                                         " -e MYSQL_USER=$DB_USER" + 
                                                         " -e MYSQL_PASSWORD=$DB_PASSWD" + 
                                                         " -e MYSQL_DATABASE=customerdb" + 
-                                                        " -p 3306:3306"
+                                                        " -p 3306:3306" + 
                                                         " --name database") {
                             sh ' while ! mysqladmin ping -h customerdb --silent; do sleep 3; done'
                             sh '**************** DB is UP **********************'
