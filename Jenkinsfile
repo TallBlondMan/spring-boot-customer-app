@@ -51,7 +51,7 @@ pipeline {
                     }
                     sh 'while ! nc -zv localhost 3306; do sleep 5; done'
                     // Run the app for Spring tests
-                    def = testApp = docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
+                    def testApp = docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
                                                                     " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
                                                                     ' -e SPRING_DATASOURCE_USERNAME=root' + 
                                                                     ' -e SPRING_DATASOURCE_PASSWORD=' + 
