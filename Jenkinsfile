@@ -1,5 +1,6 @@
 pipeline {
         agent {
+            // My remote heavy lifting server/agent
             label 'builder'
         }
         environment {
@@ -11,7 +12,7 @@ pipeline {
     stages {
         stage('Build backend') {
             steps {
-                echo "******************* Building FrontEnd *******************"
+                echo "******************* Building BackEnd *******************"
                 script {
                     // Start a sidecar MySQL database for Spring tests
                     def dummySQL = docker.image('mysql:latest').run('-e MYSQL_ROOT_PASSWORD=$DB_ROOT' + 
@@ -57,7 +58,10 @@ pipeline {
                     // Building the Docker image for later test and deployment
                     dir (path: "$WORKSPACE/customer-api"){
                         def backendImage = docker.build("backend-api:${BUILD_ID}")
-                        backendImage.push('latest')
+                        // This will push the image to internal registry - for now it saves the image on host
+                        // docker.withRegistry('https://localhost:5000', 'docker_login'){
+                        //                             backendImage.push('latest')
+                        // }
                     }
                 }
             }
@@ -70,11 +74,6 @@ pipeline {
         stage('Test') {
             steps {
                 echo '******************* SpringBoot Test *******************'
-            }
-        }
-        stage ('Push') {
-            steps {
-                echo '******************* Push to docker *******************'
             }
         }
         stage ('Deploy') {
