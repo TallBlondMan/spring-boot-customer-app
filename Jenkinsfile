@@ -45,10 +45,9 @@ pipeline {
                     def dummySQL = docker.image('mysql:latest').run("-e MYSQL_ALLOW_EMPTY_PASSWORD=True" + 
                                                             " --network temp" + 
                                                             " --name database" + 
-                                                            " -p 3306:3306") { 
+                                                            " -p 3306:3306")
                         // Run test to check if MySQL is UP
                         // sh 'until curl -sSf http://database:3306; do sleep 5; done'
-                    }
                     sh 'while ! nc -zv localhost 3306; do sleep 5; done'
                     // Run the app for Spring tests
                     def testApp = docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
