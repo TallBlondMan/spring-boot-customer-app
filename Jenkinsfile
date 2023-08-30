@@ -22,7 +22,7 @@ pipeline {
                                                             " --name database" + 
                                                             " -p 3306:3306")
                     // Run test to check if MySQL is UP
-                    sh 'until docker exec database mysql -hlocalhost -uroot; do sleep 5; done'
+                    sh 'until docker exec database mysql -hlocalhost -u$DB_USER -p$DB_PASSWD; do sleep 5; done'
                     echo 'The DB is UP'
                     // Building the image with gradle container
                     docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + 
