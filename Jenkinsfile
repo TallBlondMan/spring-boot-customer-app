@@ -42,15 +42,15 @@ pipeline {
                 echo "******************* Spin-UP MySQL database and test backend *******************"
                 script {
                     // Start a sidecar MySQL database for Spring tests
-                    def dummySQL = docker.image('mysql:latest').run('-e MYSQL_ROOT_PASSWORD=$DB_ROOT' + 
+                    def dummySQL = docker.image('mysql:latest').run('-e MYSQL_ALLOW_EMPTY_PASSWORD=true' + 
                                                             " -e MYSQL_DATABASE=customerdb" + 
                                                             " --network temp" + 
                                                             " --name database" + 
                                                             " -p 3306:3306")
-                        // Run test to check if MySQL is UP
-                        // sh 'until curl -sSf http://database:3306; do sleep 5; done'
-                    sh 'until docker exec database mysql -hlocalhost -uroot -p$DB_ROOT; do sleep 5; done'
+                    // Run test to check if MySQL is UP
+                    sh 'until docker exec database mysql -hlocalhost -uroot; do sleep 5; done'
                     echo 'The DB is UP'
+                    
                     // Run the app for Spring tests
                     def testApp = docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
                                                                     " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
