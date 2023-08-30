@@ -14,8 +14,10 @@ pipeline {
                 echo "******************* Building FrontEnd *******************"
                 script {
                     // Start a sidecar MySQL database for Spring tests
-                    def dummySQL = docker.image('mysql:latest').run('-e MYSQL_ALLOW_EMPTY_PASSWORD=true' + 
+                    def dummySQL = docker.image('mysql:latest').run('-e MYSQL_ROOT_PASSWORD=$DB_ROOT' + 
                                                             " -e MYSQL_DATABASE=customerdb" + 
+                                                            '-e MYSQL_USER=$DB_USER' +
+                                                            '-e MYSQL_PASSWORD=$DB_PASSWD' +
                                                             " --network temp" + 
                                                             " --name database" + 
                                                             " -p 3306:3306")
@@ -27,7 +29,9 @@ pipeline {
                                                                 " -v gradle_dep:/gradle/cache" + 
                                                                 " --network temp" + 
                                                                 " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
-                                                                " -e SPRING_DATASOURCE_USERNAME=root") {
+                                                                " -e SPRING_DATASOURCE_USERNAME=root" + 
+                                                                '-e SPRING_DATASOURCE_USERNAME=$DB_USER' +
+                                                                '-e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD') {
                         dir (path: "$WORKSPACE/customer-api"){
                             sh 'gradle clean build --info'
                         }
