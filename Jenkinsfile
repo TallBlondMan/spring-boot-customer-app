@@ -36,10 +36,6 @@ pipeline {
                             sh 'gradle clean build --info'
                         }
                     }
-                    // Building the Docker image for later test and deployment
-                    dir (path: "$WORKSPACE/customer-api"){
-                        def backendImage = docker.build("backend-api:${BUILD_ID}")
-                    }
                 }
             }
         }
@@ -54,48 +50,15 @@ pipeline {
                 dependencyCheckPublisher pattern: "**/dependency-check-report.xml"
             }
         }
-        stage ('Test backend') {
+        stage ('Build and push Backend') {
             steps {
-                echo "******************* Spin-UP MySQL database and test backend *******************"
+                echo "******************* Build and Push backend image *******************"
                 script {
-                    // Start a sidecar MySQL database for Spring tests
-                    def dummySQL = docker.image('mysql:latest').run('-e MYSQL_ALLOW_EMPTY_PASSWORD=true' + 
-                                                            " -e MYSQL_DATABASE=customerdb" + 
-                                                            " --network temp" + 
-                                                            " --name database" + 
-                                                            " -p 3306:3306")
-                    // Run test to check if MySQL is UP
-                    sh 'until docker exec database mysql -hlocalhost -uroot; do sleep 5; done'
-                    echo 'The DB is UP'
-
-                    // Run the app for Spring tests
-                    def testApp = docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
-                                                                    " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
-                                                                    " -e SPRING_DATASOURCE_USERNAME=root" + 
-                                                                    ' -e SPRING_DATASOURCE_PASSWORD=$DB_ROOT' + 
-                                                                    " -p 8081:8080") {
-                        sh 'java -jar app.jar'
+                    // Building the Docker image for later test and deployment
+                    dir (path: "$WORKSPACE/customer-api"){
+                        def backendImage = docker.build("backend-api:${BUILD_ID}")
                     }
-                    // dir (path: "$WORKSPACE/customer-api") {
-                    //     def backendImage = docker.build("backend-api:${BUILD_ID}")
-                    // }
-                    // docker.image('mysql:latest').run("--network temp" + 
-                    //                                     ' -e MYSQL_ROOT_PASSWORD=$DB_ROOT' + 
-                    //                                     ' -e MYSQL_USER=$DB_USER' + 
-                    //                                     ' -e MYSQL_PASSWORD=$DB_PASSWD' + 
-                    //                                     ' -e MYSQL_DATABASE=customerdb' + 
-                    //                                     " -p 3306:3306" + 
-                    //                                     " --name database")
-                    // docker.image('mysql:latest').inside("--network temp") {
-                    //     sh 'while ! mysqladmin ping -h database; do sleep 5; done'
-                    // }
-                    // docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
-                    //                                                 " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
-                    //                                                 ' -e SPRING_DATASOURCE_USERNAME=$DB_USER' + 
-                    //                                                 ' -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD' + 
-                    //                                                 " -dp 8081:8080") {
-                    //     sh 'java -jar app.jar'
-                    // }
+                    backendImage.push()
                 }
             }
         }
