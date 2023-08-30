@@ -56,9 +56,9 @@ pipeline {
                 script {
                     // Building the Docker image for later test and deployment
                     dir (path: "$WORKSPACE/customer-api"){
-                        def backendImage = docker.build("backend-api:${BUILD_ID}")
+                        def backendImage = docker.build("tallblondman/backend-api:${BUILD_ID}")
                     }
-                    backendImage.push()
+                    backendImage.push('latest')
                 }
             }
         }
