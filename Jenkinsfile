@@ -13,10 +13,23 @@ pipeline {
             steps {
                 echo "******************* Building FrontEnd *******************"
                 script {
+                    // Start a sidecar MySQL database for Spring tests
+                    def dummySQL = docker.image('mysql:latest').run('-e MYSQL_ALLOW_EMPTY_PASSWORD=true' + 
+                                                            " -e MYSQL_DATABASE=customerdb" + 
+                                                            " --network temp" + 
+                                                            " --name database" + 
+                                                            " -p 3306:3306")
+                    // Run test to check if MySQL is UP
+                    sh 'until docker exec database mysql -hlocalhost -uroot; do sleep 5; done'
+                    echo 'The DB is UP'
                     // Building the image with gradle container
-                    docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + " -v gradle_dep:/gradle/cache") {
+                    docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + 
+                                                                " -v gradle_dep:/gradle/cache" + 
+                                                                " --network temp" + 
+                                                                " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
+                                                                " -e SPRING_DATASOURCE_USERNAME=root") {
                         dir (path: "$WORKSPACE/customer-api"){
-                            sh 'gradle clean bootJar --info'
+                            sh 'gradle clean build --info'
                         }
                     }
                     // Building the Docker image for later test and deployment
