@@ -50,7 +50,7 @@ pipeline {
                     // Run test to check if MySQL is UP
                     sh 'until docker exec database mysql -hlocalhost -uroot; do sleep 5; done'
                     echo 'The DB is UP'
-                    
+
                     // Run the app for Spring tests
                     def testApp = docker.image("backend-api:${BUILD_ID}").inside("--network temp" + 
                                                                     " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
@@ -106,7 +106,7 @@ pipeline {
     post {
         always {
             echo '******************* CLEANING UP *******************'
-            sh "docker ps -a | awk '{print \$1}' | xargs -r docker rm -f"
+            sh "docker rm -f database"
         }
     }
 }
