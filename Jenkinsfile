@@ -62,18 +62,25 @@ pipeline {
                         // docker.withRegistry('https://localhost:5000', 'docker_login'){
                         //                             backendImage.push('latest')
                         // }
+                        echo 'Image is stored localy'
                     }
+                }
+            }
+        }
+        stage('Build Frontend') {
+            steps {
+                echo '******************* Compile and build frontend *******************'
+                dir (path: "$WORKSPACE/customer-frontend") {
+                    def frontendImage = docker.build("frontend-api:${BUILD_ID}")
+                    def frontendCont = docker.image("frontend-api:${BUILD_ID}").run('-p 8081:8081' + ' --network temp')
+
+                    
                 }
             }
         }
         stage('SonarQube') {
             steps {
                 echo '******************* SonarQube analize *******************'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo '******************* SpringBoot Test *******************'
             }
         }
         stage ('Deploy') {
