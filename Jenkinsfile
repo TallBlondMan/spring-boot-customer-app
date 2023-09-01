@@ -59,10 +59,10 @@ pipeline {
                     dir (path: "$WORKSPACE/customer-api"){
                         def backendImage = docker.build("backend-api:${BUILD_ID}")
                         // This will push the image to internal registry - for now it saves the image on host
-                        // docker.withRegistry('https://localhost:5000', 'docker_login'){
-                        //                             backendImage.push('latest')
-                        // }
-                        echo 'Image is stored localy'
+                        docker.withRegistry('https://10.6.0.243:5000'){
+                            backendImage.push('latest')
+                        }
+                        echo 'Image is stored!'
                     }
                 }
             }
@@ -70,11 +70,13 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 echo '******************* Compile and build frontend *******************'
+                // Dockerfile is present in the directory to build the frontend
                 dir (path: "$WORKSPACE/customer-frontend") {
                     def frontendImage = docker.build("frontend-api:${BUILD_ID}")
-                    def frontendCont = docker.image("frontend-api:${BUILD_ID}").run('-p 8081:8081' + ' --network temp')
-
-                    
+                    // Might want to rest it later but for now just a simple script
+                    def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --network temp' + ' --name frontend') {
+                        sh 'docker logs frontend'
+                    } 
                 }
             }
         }
