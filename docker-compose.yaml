@@ -1,6 +1,6 @@
 version: '3'
 services:
   frontend:
-    image: 10.6.0.243:5000/frontend-api:${BUILD_ID}
+    image: 10.6.0.243:5000/frontend-api:latest
     ports:
-      -8081:8081
+      - 8081:8081
