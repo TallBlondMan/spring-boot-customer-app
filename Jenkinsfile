@@ -76,12 +76,12 @@ pipeline {
                     dir (path: "$WORKSPACE/customer-frontend") {
                         def frontendImage = docker.build("frontend-api:${BUILD_ID}")
                         // Might want to test it later but for now just a simple script
-                        def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --network temp' + ' --name frontend') {
+                        def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --name frontend') {
                             // The TEST
                             sh 'sleep 3'
                             sh 'docker logs frontend'
                         } 
-                        docker.withRegistry('https://10.6.0.243:5000'){
+                        docker.withRegistry('https://10.6.0.243:5000') {
                             frontendImage.push('latest')
                         }
                         echo 'Image is stored!'
@@ -96,7 +96,12 @@ pipeline {
         }
         stage ('Deploy') {
             steps {
-                echo '******************* Deploy the Docker container *******************'
+                echo '******************* Docker Compose / Docker Swarm ? *******************'
+                    script {
+                        docker.withRegistry('https://10.6.0.243:5000') {
+                            sh 'docker compose up -d -w'
+                        }
+                    }
             }
         }
     }
