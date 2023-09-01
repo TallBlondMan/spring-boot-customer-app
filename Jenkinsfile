@@ -68,7 +68,7 @@ pipeline {
                 }
             }
         }
-        stage('Build Frontend') {
+        stage('Build and push Frontend') {
             steps {
                 echo '******************* Compile and build frontend *******************'
                 // Dockerfile is present in the directory to build the frontend
@@ -79,6 +79,10 @@ pipeline {
                         def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --network temp' + ' --name frontend') {
                             sh 'docker logs frontend'
                         } 
+                        docker.withRegistry('https://10.6.0.243:5000'){
+                            frontendImage.push('latest')
+                        }
+                        echo 'Image is stored!'
                     }
                 }
             }
