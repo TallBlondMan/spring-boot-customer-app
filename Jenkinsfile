@@ -26,6 +26,7 @@ pipeline {
                     sh 'until docker exec database mysql -hlocalhost -u$DB_USER -p$DB_PASSWD; do sleep 5; done'
                     echo 'The DB is UP'
                     // Building the image with gradle container
+                    // It's supplied with gradle_dep volume for the dependencies to be stored
                     docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + 
                                                                 " -v gradle_dep:/gradle/cache" + 
                                                                 " --network temp" + 
