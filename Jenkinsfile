@@ -71,12 +71,14 @@ pipeline {
             steps {
                 echo '******************* Compile and build frontend *******************'
                 // Dockerfile is present in the directory to build the frontend
-                dir (path: "$WORKSPACE/customer-frontend") {
-                    def frontendImage = docker.build("frontend-api:${BUILD_ID}")
-                    // Might want to rest it later but for now just a simple script
-                    def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --network temp' + ' --name frontend') {
-                        sh 'docker logs frontend'
-                    } 
+                script {
+                    dir (path: "$WORKSPACE/customer-frontend") {
+                        def frontendImage = docker.build("frontend-api:${BUILD_ID}")
+                        // Might want to rest it later but for now just a simple script
+                        def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --network temp' + ' --name frontend') {
+                            sh 'docker logs frontend'
+                        } 
+                    }
                 }
             }
         }
