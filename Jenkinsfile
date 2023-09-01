@@ -97,11 +97,11 @@ pipeline {
         stage ('Deploy') {
             steps {
                 echo '******************* Docker Compose / Docker Swarm ? *******************'
-                    script {
-                        docker.withRegistry('https://10.6.0.243:5000') {
-                            sh 'docker compose up -d --wait'
-                        }
-                    }
+                    // script {
+                    //     docker.withRegistry('https://10.6.0.243:5000') {
+                    sh 'docker compose up -d --wait'
+                    //     }
+                    // }
             }
         }
     }
