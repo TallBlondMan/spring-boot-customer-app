@@ -93,9 +93,10 @@ pipeline {
             steps {
                 echo '******************* Database setup *******************'
                 dir (path: "$WORKSPACE/db") {
-                    sh 'sed -i "s/<root_pass>/${DB_ROOT}" Dockerfile'
-                    sh 'sed -i "s/<db_user>/${DB_USER}" Dockerfile'
-                    sh 'sed -i "s/<db_pass>/${DB_PASSWD}" Dockerfile'
+                    // Pass the database connection info to Dockerfile of a DB
+                    sh 'sed -i "s/<root_pass>/${DB_ROOT}/" Dockerfile'
+                    sh 'sed -i "s/<db_user>/${DB_USER}/" Dockerfile'
+                    sh 'sed -i "s/<db_pass>/${DB_PASSWD}/" Dockerfile'
                     script {
                         def databaseImage = docker.build("app-database:${BUILD_ID}")
                             docker.withRegistry("${PRIV_REPO}") {
