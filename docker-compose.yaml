@@ -2,6 +2,11 @@ version: '3'
 services:
   app-database:
     image: 10.6.0.243:5000/app-database:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=<root_pass>
+      - MYSQL_DATABASE=customerdb
+      - MYSQL_USER=<db_user>
+      - MYSQL_PASSWORD=<db_pass>
     volumes:
       - database:/var/lib/mysql
     ports:
@@ -14,7 +19,9 @@ services:
   app-backend:
     image: 10.6.0.243:5000/backend-api:latest
     environment:
-      - MYSQL_URI=jdbc:mysql://app-database:3306/customerdb
+      - SPRING_DATASOURCE_URL=jdbc:mysql://app-database:3306/customerdb
+      - SPRING_DATASOURCE_USERNAME=<db_user>
+      - SPRING_DATASOURCE_PASSWORD=<db_pass>
     ports:
       - 8080:8080
     depends_on:
