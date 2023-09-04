@@ -93,14 +93,12 @@ pipeline {
         stage('Database setup') {
             steps {
                 echo '******************* Database setup *******************'
-                {
                     // Pass the database creation details into Dockerfile
-                    script {
-                        dir (path: "$WORKSPACE/db") {
-                            def databaseImage = docker.build("app-database:${BUILD_ID}")
-                            docker.withRegistry("${PRIV_REPO}") {
-                                databaseImage.push('latest')
-                            }
+                script {
+                    dir (path: "$WORKSPACE/db") {
+                        def databaseImage = docker.build("app-database:${BUILD_ID}")
+                        docker.withRegistry("${PRIV_REPO}") {
+                            databaseImage.push('latest')
                         }
                     }
                 }
