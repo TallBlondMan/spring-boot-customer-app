@@ -8,6 +8,7 @@ pipeline {
             DB_USER = credentials('DB_User')
             DB_PASSWD = credentials('DB_password')
             DB_ROOT = credentials('DB_Root_Password')
+            PRIV_REPO = 'https://10.6.0.243:5000'
         }
     stages {
         stage('Build backend') {
@@ -30,8 +31,7 @@ pipeline {
                     docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + 
                                                                 " -v gradle_dep:/gradle/cache" + 
                                                                 " --network temp" + 
-                                                                " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" + 
-                                                                " -e SPRING_DATASOURCE_USERNAME=root" + 
+                                                                " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" +  
                                                                 ' -e SPRING_DATASOURCE_USERNAME=$DB_USER' +
                                                                 ' -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD') {
                         dir (path: "$WORKSPACE/customer-api"){
@@ -60,7 +60,7 @@ pipeline {
                     dir (path: "$WORKSPACE/customer-api"){
                         def backendImage = docker.build("backend-api:${BUILD_ID}")
                         // This will push the image to internal registry - for now it saves the image on host
-                        docker.withRegistry('https://10.6.0.243:5000'){
+                        docker.withRegistry("${PRIV_REPO}"){
                             backendImage.push('latest')
                         }
                         echo 'Image is stored!'
@@ -81,7 +81,7 @@ pipeline {
                             sh 'sleep 3'
                             sh 'docker logs frontend'
                         } 
-                        docker.withRegistry('https://10.6.0.243:5000') {
+                        docker.withRegistry("${PRIV_REPO}") {
                             frontendImage.push('latest')
                         }
                         echo 'Image is stored!'
@@ -89,19 +89,26 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube') {
+        stage('Database setup') {
             steps {
-                echo '******************* SonarQube analize *******************'
+                echo '******************* Database setup *******************'
+                dir (path: "$WORKSPACE/db") {
+                    sh 'sed -i "s/<root_pass>/${DB_ROOT}" Dockerfile'
+                    sh 'sed -i "s/<db_user>/${DB_USER}" Dockerfile'
+                    sh 'sed -i "s/<db_pass>/${DB_PASSWD}" Dockerfile'
+                    script {
+                        def databaseImage = docker.build("app-database:${BUILD_ID}")
+                            docker.withRegistry("${PRIV_REPO}") {
+                                databaseImage.push('latest')
+                        }
+                    }
+                }
             }
         }
         stage ('Deploy') {
             steps {
                 echo '******************* Docker Compose / Docker Swarm ? *******************'
-                    // script {
-                    //     docker.withRegistry('https://10.6.0.243:5000') {
                     sh 'docker compose up -d --wait'
-                    //     }
-                    // }
             }
         }
     }

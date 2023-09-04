@@ -1,6 +1,36 @@
 version: '3'
 services:
-  frontend:
+  app-database:
+    image: 10.6.0.243:5000/app-database:latest
+    volumes:
+      - database:/var/lib/mysql
+    ports:
+      - 3306:3306 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://localhost:3306"]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+  app-backend:
+    image: 10.6.0.243:5000/backend-api:latest
+    environment:
+      - MYSQL_URI=jdbc:mysql://app-database:3306/customerdb
+    ports:
+      - 8080:8080
+    depends_on:
+      - app-database
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+      start_period: 30s
+  app-frontebd:
     image: 10.6.0.243:5000/frontend-api:latest
     ports:
       - 8081:8081
+    depends_on:
+      - app-backend
+volumes:
+  database:
+
