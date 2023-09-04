@@ -38,6 +38,7 @@ pipeline {
                             sh 'gradle clean build --info'
                         }
                     }
+                    dummySQL.stop()
                 }
             }
         }
@@ -116,7 +117,7 @@ pipeline {
     post {
         always {
             echo '******************* CLEANING UP *******************'
-            sh "docker rm -f database"
+            sh "All clear"
         }
     }
 }
