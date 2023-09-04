@@ -120,7 +120,7 @@ pipeline {
     post {
         always {
             echo '******************* CLEANING UP *******************'
-            sh "All clear"
+            echo "All clear"
         }
     }
 }
