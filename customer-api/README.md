@@ -11,3 +11,4 @@
 Notes to self
 
 Try running the app without Nginx and move from there
+Maybe the Axios module is causing trouble
