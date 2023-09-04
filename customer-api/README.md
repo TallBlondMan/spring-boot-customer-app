@@ -6,3 +6,8 @@
 3. Run the Docker with ```docker run -dp 8081:8080 -e SPRING_DATASOURCE_URL=jdbc:mysql://<host>:<port> -e SPRING_DATASOURCE_USERNAME=username -e SPRING_DATASOURCE_PASSWORD=password customer-api:1```
 4. Containers have to be on custom network to use NAMES
 5. Need to add our repository to insecure repositories on docker host server in ```/etc/docker/daemon.json``` - add line ```"insecure-registries":["host:port"]```
+
+
+Notes to self
+
+Try running the app without Nginx and move from there
