@@ -26,12 +26,12 @@ services:
       - 8080:8080
     depends_on:
       - app-database
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8080"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 30s
   app-frontebd:
     image: 10.6.0.243:5000/frontend-api:latest
     ports:
