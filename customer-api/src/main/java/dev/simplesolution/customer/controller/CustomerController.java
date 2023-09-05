@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.simplesolution.customer.entity.Customer;
 import dev.simplesolution.customer.repository.CustomerRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
 @RestController
+@CrossOrigin(origins = "http://app-frontend:8081")
 @RequestMapping("/api")
 public class CustomerController {
 	

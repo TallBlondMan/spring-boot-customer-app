@@ -34,8 +34,6 @@ services:
     #   start_period: 30s
   app-frontebd:
     image: 10.6.0.243:5000/frontend-api:latest
-    environment:
-      - VUE_APP_API_BASE_URL=http://app-backend:8080/api
     ports:
       - 8081:8081
     depends_on:
