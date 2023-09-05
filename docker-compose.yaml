@@ -32,7 +32,7 @@ services:
     #   timeout: 5s
     #   retries: 3
     #   start_period: 30s
-  app-frontebd:
+  app-fronteb:
     image: 10.6.0.243:5000/frontend-api:latest
     ports:
       - 8081:8081
