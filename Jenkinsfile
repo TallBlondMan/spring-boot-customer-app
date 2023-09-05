@@ -33,7 +33,8 @@ pipeline {
                                                                 " --network temp" + 
                                                                 " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" +  
                                                                 ' -e SPRING_DATASOURCE_USERNAME=$DB_USER' +
-                                                                ' -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD') {
+                                                                ' -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD' + 
+                                                                '-u root') {
                         dir (path: "$WORKSPACE/customer-api"){
                             sh 'gradle clean build --info'
                         }
@@ -120,7 +121,7 @@ pipeline {
     post {
         always {
             echo '******************* CLEANING UP *******************'
-            echo "All clear"
+            sh 'docker rm -f database'
         }
     }
 }
