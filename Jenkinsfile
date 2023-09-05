@@ -60,7 +60,7 @@ pipeline {
                 script {
                     // Building the Docker image for later test and deployment
                     dir (path: "$WORKSPACE/customer-api"){
-                        def backendImage = docker.build("backend-api:${BUILD_ID}", '--no-cache .')
+                        def backendImage = docker.build("backend-api:${BUILD_ID}")
                         // This will push the image to internal registry - for now it saves the image on host
                         docker.withRegistry("${PRIV_REPO}"){
                             backendImage.push('latest')
@@ -76,7 +76,7 @@ pipeline {
                 // Dockerfile is present in the directory to build the frontend
                 script {
                     dir (path: "$WORKSPACE/customer-frontend") {
-                        def frontendImage = docker.build("frontend-api:${BUILD_ID}", '--no-cache .')
+                        def frontendImage = docker.build("frontend-api:${BUILD_ID}")
                         // Might want to test it later but for now just a simple script
                         def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --name frontend') {
                             // The TEST
@@ -97,7 +97,7 @@ pipeline {
                     // Pass the database creation details into Dockerfile
                 script {
                     dir (path: "$WORKSPACE/db") {
-                        def databaseImage = docker.build("app-database:${BUILD_ID}", '--no-cache .')
+                        def databaseImage = docker.build("app-database:${BUILD_ID}")
                         docker.withRegistry("${PRIV_REPO}") {
                             databaseImage.push('latest')
                         }
