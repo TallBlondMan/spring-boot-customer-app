@@ -33,8 +33,8 @@ pipeline {
                                                                 " --network temp" + 
                                                                 " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" +  
                                                                 ' -e SPRING_DATASOURCE_USERNAME=$DB_USER' +
-                                                                ' -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD' + 
-                                                                '-u root') {
+                                                                ' -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD' +
+                                                                ' -u root') {
                         dir (path: "$WORKSPACE/customer-api"){
                             sh 'gradle clean build --info'
                         }
