@@ -22,7 +22,10 @@ public class CustomerApiApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/*").allowedOrigins(allowedOrigins);
+				registry.addMapping("/api/**")
+				.allowedOrigins(allowedOrigins)
+				.allowedMethods("POST", "PUT", "GET", "DELETE")
+				;
 			}
 		};
 	}
