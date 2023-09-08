@@ -77,7 +77,7 @@ pipeline {
                 // Dockerfile is present in the directory to build the frontend
                 script {
                     dir (path: "$WORKSPACE/customer-frontend") {
-                        def frontendImage = docker.build("frontend-api:${BUILD_ID}", "--build-arg ${SERVER_IP} .")
+                        def frontendImage = docker.build("frontend-api:${BUILD_ID}", "--build-arg API_BASE_URL=${SERVER_IP} .")
                         // Might want to test it later but for now just a simple script
                         def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --name frontend') {
                             // The TEST
