@@ -24,8 +24,7 @@ public class CustomerApiApplication {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/api/**")
 				.allowedOrigins(allowedOrigins)
-				.allowedMethods("POST", "PUT", "GET", "DELETE")
-				;
+				.allowedMethods("POST", "PUT", "GET", "DELETE");
 			}
 		};
 	}
