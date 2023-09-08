@@ -35,6 +35,8 @@ services:
     #   start_period: 30s
   app-frontend:
     image: 10.6.0.243:5000/frontend-api:latest
+    environment:
+      - API_BASE_URL=http://<serverIP>:8080/api
     ports:
       - 8081:8081
     depends_on:
