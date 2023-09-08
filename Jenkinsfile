@@ -77,7 +77,7 @@ pipeline {
                 // Dockerfile is present in the directory to build the frontend
                 script {
                     dir (path: "$WORKSPACE/customer-frontend") {
-                        def frontendImage = docker.build("frontend-api:${BUILD_ID}")
+                        def frontendImage = docker.build("frontend-api:${BUILD_ID}", "--build-arg ${SERVER_IP} .")
                         // Might want to test it later but for now just a simple script
                         def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --name frontend') {
                             // The TEST
@@ -114,7 +114,7 @@ pipeline {
                 sh 'sed -i "s/<db_user>/${DB_USER}/" docker-compose.yaml'
                 sh 'sed -i "s/<db_pass>/${DB_PASSWD}/" docker-compose.yaml'
                 sh 'sed -i "s/<serverIP>/${SERVER_IP}/" docker-compose.yaml'
-                
+
                 // Start the application stack
                 sh 'docker compose up -d --wait'
             }
