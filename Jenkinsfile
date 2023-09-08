@@ -9,6 +9,7 @@ pipeline {
             DB_PASSWD = credentials('DB_password')
             DB_ROOT = credentials('DB_Root_Password')
             PRIV_REPO = 'https://10.6.0.243:5000'
+            SERVER_IP = '10.6.0.232'
         }
     stages {
         stage('Build backend') {
@@ -112,6 +113,7 @@ pipeline {
                 sh 'sed -i "s/<root_pass>/${DB_ROOT}/" docker-compose.yaml'
                 sh 'sed -i "s/<db_user>/${DB_USER}/" docker-compose.yaml'
                 sh 'sed -i "s/<db_pass>/${DB_PASSWD}/" docker-compose.yaml'
+                sh 'sed -i "s/<serverIP>/${SERVER_IP}/" docker-compose.yaml'
                 
                 // Start the application stack
                 sh 'docker compose up -d --wait'
