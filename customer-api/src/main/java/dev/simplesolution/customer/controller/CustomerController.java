@@ -19,7 +19,7 @@ import dev.simplesolution.customer.entity.Customer;
 import dev.simplesolution.customer.repository.CustomerRepository;
 
 @RestController // (origins = env.getProperty("cors.url"))
-@CrossOrigin(maxAge = 3600)
+@CrossOrigin(origins = "http://10.6.0.232:8081")
 @RequestMapping("/api")
 public class CustomerController {
 	
