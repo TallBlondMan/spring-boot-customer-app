@@ -12,6 +12,28 @@ pipeline {
             SERVER_IP = '10.6.0.232'
         }
     stages {
+                stage('OWASP') {
+            steps {
+                // Check dependencies for vulnerabilities 
+                echo "******************* Checking dependencies with OWASP *******************"
+                dir (path: "$WORKSPACE/customer-api"){
+                    dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true
+                }
+                // Catching the file and posting the results
+                dependencyCheckPublisher pattern: "**/dependency-check-report.xml"
+            }
+        }
+        stage('SonarQube analysis') {
+            steps {
+                script{
+                    withSonarQubeEnv('sonar_server') {
+                        dir (path: "$WORKSPACE/customer-api"){
+                            sh './gradlew sonarqube'
+                        }
+                    }
+                }
+            }
+        }
         stage('Build backend') {
             steps {
                 echo "******************* Building BackEnd *******************"
@@ -41,28 +63,6 @@ pipeline {
                         }
                     }
                     dummySQL.stop()
-                }
-            }
-        }
-        stage('OWASP') {
-            steps {
-                // Check dependencies for vulnerabilities 
-                echo "******************* Checking dependencies with OWASP *******************"
-                dir (path: "$WORKSPACE/customer-api"){
-                    dependencyCheck additionalArguments: '', odcInstallation: 'owaspdc', skipOnScmChange: true
-                }
-                // Catching the file and posting the results
-                dependencyCheckPublisher pattern: "**/dependency-check-report.xml"
-            }
-        }
-        stage('SonarQube analysis') {
-            steps {
-                script{
-                    withSonarQubeEnv('sonar_server') {
-                        dir (path: "$WORKSPACE/customer-api"){
-                            sh './gradlew sonarqube'
-                        }
-                    }
                 }
             }
         }
