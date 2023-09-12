@@ -1,5 +1,6 @@
 plugins {
 	id 'org.springframework.boot' version '2.7.1'
+	id "org.sonarqube" version "4.3.1.3277"
 	id 'java'
 }
 
@@ -25,6 +26,14 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "customer-api"
+    property "sonar.organization", "dev.simplesolution"
+    property "sonar.sources", "src/main"
+  }
 }
 
 jar {
