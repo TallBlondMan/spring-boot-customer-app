@@ -28,6 +28,7 @@ pipeline {
                 script{
                     withSonarQubeEnv('sonar_server') {
                         dir (path: "$WORKSPACE/customer-api"){
+                            sh 'chmod +x gradlew'
                             sh './gradlew sonarqube'
                         }
                     }
