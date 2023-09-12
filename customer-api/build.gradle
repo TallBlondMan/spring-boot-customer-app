@@ -28,7 +28,7 @@ test {
 	useJUnitPlatform()
 }
 
-sonarqube {
+sonar {
   properties {
     property "sonar.projectKey", "customer-api"
     property "sonar.organization", "dev.simplesolution"

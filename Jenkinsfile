@@ -12,7 +12,7 @@ pipeline {
             SERVER_IP = '10.6.0.232'
         }
     stages {
-                stage('OWASP') {
+        stage('OWASP') {
             steps {
                 // Check dependencies for vulnerabilities 
                 echo "******************* Checking dependencies with OWASP *******************"
@@ -29,8 +29,7 @@ pipeline {
                     docker.image('gradle:8.2-alpine').inside('-u root') {
                         withSonarQubeEnv('sonar_server') {
                             dir (path: "$WORKSPACE/customer-api"){
-                                sh 'chmod +x gradlew'
-                                sh 'gradle sonarqube'
+                                sh 'gradle sonar'
                             }
                         }
                     }
