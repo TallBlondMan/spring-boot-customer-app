@@ -55,6 +55,11 @@ pipeline {
                 dependencyCheckPublisher pattern: "**/dependency-check-report.xml"
             }
         }
+        stage('SonarQube analysis') {
+            withSonarQubeEnv() { // Will pick the global server connection you have configured
+            sh './gradlew sonarqube'
+            }
+        }
         stage ('Build and push Backend') {
             steps {
                 echo "******************* Build and Push backend image *******************"
