@@ -58,8 +58,10 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 script{
-                    withSonarQubeEnv('sonar_server') { // Will pick the global server connection you have configured
-                    sh './gradlew sonarqube'
+                    withSonarQubeEnv('sonar_server') {
+                        dir (path: "$WORKSPACE/customer-api"){
+                            sh './gradlew sonarqube'
+                        }
                     }
                 }
             }
