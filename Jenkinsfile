@@ -26,7 +26,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 script{
-                    docker.image('gradle:8.2-alpine').inside() {
+                    docker.image('gradle:8.2-alpine').inside('-u root') {
                         withSonarQubeEnv('sonar_server') {
                             dir (path: "$WORKSPACE/customer-api"){
                                 sh 'chmod +x gradlew'
