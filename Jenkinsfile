@@ -26,6 +26,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 script{
+                    // Run in docker container to not bother with gradle installs
                     docker.image('gradle:8.2-alpine').inside('-u root') {
                         withSonarQubeEnv('sonar_server') {
                             dir (path: "$WORKSPACE/customer-api"){
