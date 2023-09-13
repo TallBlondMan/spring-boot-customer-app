@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.simplesolution.customer.entity.Customer;
 import dev.simplesolution.customer.repository.CustomerRepository;
 
-@RestController // (origins = env.getProperty("cors.url"))
+@RestController
 @CrossOrigin(origins = "${CROS_ALLOWED_ORIGINS}")
 @RequestMapping("/api")
 public class CustomerController {
