@@ -22,7 +22,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://app-database:3306/customerdb
       - SPRING_DATASOURCE_USERNAME=<db_user>
       - SPRING_DATASOURCE_PASSWORD=<db_pass>
-      - cors_allowed_origins=http://<serverIP>:8081
+      - CROS_ALLOWED_ORIGINS=http://<serverIP>:8081
     ports:
       - 8080:8080
     depends_on:
