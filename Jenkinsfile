@@ -75,7 +75,7 @@ pipeline {
                 script {
                     // Building the Docker image for later test and deployment
                     dir (path: "$WORKSPACE/customer-api"){
-                        def backendImage = docker.build("backend-api:${BUILD_ID}")
+                        def backendImage = docker.build("backend-api:${BUILD_ID}", "--build-arg CROS_ALLOWED_ORIGINS=http://${SERVER_IP}:8081 .")
                         // This will push the image to internal registry - for now it saves the image on host
                         docker.withRegistry("${PRIV_REPO}"){
                             backendImage.push('latest')
@@ -91,7 +91,7 @@ pipeline {
                 // Dockerfile is present in the directory to build the frontend
                 script {
                     dir (path: "$WORKSPACE/customer-frontend") {
-                        def frontendImage = docker.build("frontend-api:${BUILD_ID}", "--build-arg API_BASE_URL=http://${SERVER_IP}/api .")
+                        def frontendImage = docker.build("frontend-api:${BUILD_ID}", "--build-arg API_BASE_URL=http://${SERVER_IP}:8080/api .")
                         // Might want to test it later but for now just a simple script
                         def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --name frontend') {
                             // The TEST
