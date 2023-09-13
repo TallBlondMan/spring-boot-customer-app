@@ -28,8 +28,11 @@ pipeline {
                 script{
                     // Run in docker container to not bother with gradle installs
                     docker.image('gradle:8.2-alpine').inside('-u root') {
+                        // Specify the server
                         withSonarQubeEnv('sonar_server') {
                             dir (path: "$WORKSPACE/customer-api"){
+                                // And the command to run for SonarScaner
+                                // This is defined in detail in build.gradle
                                 sh 'gradle sonar'
                             }
                         }
@@ -65,6 +68,8 @@ pipeline {
                             sh 'gradle clean build --info'
                         }
                     }
+                    // This could be done in post for this stage but it's done at the end if it fails
+                    // And I wanted to have a post.global stage
                     dummySQL.stop()
                 }
             }
@@ -92,12 +97,14 @@ pipeline {
                 script {
                     dir (path: "$WORKSPACE/customer-frontend") {
                         def frontendImage = docker.build("frontend-api:${BUILD_ID}", "--build-arg VUE_APP_BASE_URL=http://${SERVER_IP}:8080/api .")
+                        // Simple test of made app
                         // Might want to test it later but for now just a simple script
                         def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --name frontend') {
                             // The TEST
                             sh 'sleep 3'
                             sh 'docker logs frontend'
                         } 
+                        // And send it on it's marry way
                         docker.withRegistry("${PRIV_REPO}") {
                             frontendImage.push('latest')
                         }
