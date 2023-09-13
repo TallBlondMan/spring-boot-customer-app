@@ -119,6 +119,7 @@ pipeline {
                     // Pass the database creation details into Dockerfile
                 script {
                     dir (path: "$WORKSPACE/db") {
+                        // This will ensure our database has a table inside
                         def databaseImage = docker.build("app-database:${BUILD_ID}")
                         docker.withRegistry("${PRIV_REPO}") {
                             databaseImage.push('latest')
@@ -129,8 +130,9 @@ pipeline {
         }
         stage ('Deploy') {
             steps {
-                echo '******************* Docker Compose / Docker Swarm ? *******************'
-                // Set the DB details in docker compose for security    
+                echo '******************* Docker Compose / Docker Swarm *******************'
+                // Set the DB details in docker compose
+                // And set the host parameters  
                 sh 'sed -i "s/<root_pass>/${DB_ROOT}/" docker-compose.yaml'
                 sh 'sed -i "s/<db_user>/${DB_USER}/" docker-compose.yaml'
                 sh 'sed -i "s/<db_pass>/${DB_PASSWD}/" docker-compose.yaml'
