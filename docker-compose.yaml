@@ -15,7 +15,7 @@ services:
     ports:
       - 3306:3306 
     healthcheck:
-      test: ["CMD", "mysql", "-u$$MYSQL_USER", "-hlocalhost", "-p$$MYSQL_PASSWORD"]
+      test: ["CMD", "curl", "-f", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 3
