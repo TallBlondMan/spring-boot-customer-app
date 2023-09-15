@@ -15,7 +15,7 @@ services:
     ports:
       - 3306:3306 
     healthcheck:
-      test: ["CMD", "curl", "-f", "localhost"]
+      test: ["CMD", "curl", "-f", "https://localhost:3306"]
       interval: 10s
       timeout: 5s
       retries: 3
