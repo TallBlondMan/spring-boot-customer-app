@@ -22,9 +22,9 @@ services:
   app-backend:
     image: 10.6.0.243:5000/backend-api:latest
     networks:
-      - app_external:
-         aliases: ["app-backend"]
-      - db_internal
+      app_external:
+        aliases: ["app-backend"]
+      db_internal:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://app-database:3306/customerdb
       - SPRING_DATASOURCE_USERNAME=<db_user>
