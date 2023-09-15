@@ -4,8 +4,8 @@ COPY package.json .
 RUN npm install
 COPY . .
 ENV VUE_APP_BASE_URL=
-RUN sed -i "s/<serverIP>/${VUE_APP_BASE_URL}/" .env
-RUN npm run build
+# RUN sed -i "s/<serverIP>/${VUE_APP_BASE_URL}/" .env
+RUN npm run build && export VUE_APP_BASE_URL
 
 FROM nginx:latest
 WORKDIR /app
