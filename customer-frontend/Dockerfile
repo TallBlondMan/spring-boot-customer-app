@@ -4,11 +4,7 @@ COPY package.json .
 RUN npm install
 COPY . .
 ENV VUE_APP_BASE_URL=
-# RUN sed -i "s/<serverIP>/${VUE_APP_BASE_URL}/" .env
-# RUN npm run build && export VUE_APP_BASE_URL
-RUN export NODE_OPTIONS=--openssl-legacy-provider && \
-    export VUE_APP_BASE_URL=$$VUE_APP_BASE_URL && \
-    vue-cli-service build
+RUN npm run build
 
 FROM nginx:latest
 WORKDIR /app

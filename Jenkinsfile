@@ -96,7 +96,8 @@ pipeline {
                 // Dockerfile is present in the directory to build the frontend
                 script {
                     dir (path: "$WORKSPACE/customer-frontend") {
-                        def frontendImage = docker.build("frontend-api:${BUILD_ID}", "--build-arg VUE_APP_BASE_URL=http://${SERVER_IP}:8080/api .")
+                        sh 'sed -i "s/<serverIP>/${SERVER_IP}/" .env'
+                        def frontendImage = docker.build("frontend-api:${BUILD_ID}")
                         // Simple test of made app
                         // Might want to test it later but for now just a simple script
                         def frontendCont = docker.image("frontend-api:${BUILD_ID}").withRun('-p 8081:8081' + ' --name frontend') {
