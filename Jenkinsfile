@@ -80,7 +80,7 @@ pipeline {
                 script {
                     // Building the Docker image for later test and deployment
                     dir (path: "$WORKSPACE/customer-api"){
-                        def backendImage = docker.build("backend-api:${BUILD_ID}", "--build-arg CROS_ALLOWED_ORIGINS=http://${SERVER_IP}:8081 .")
+                        def backendImage = docker.build("backend-api:${BUILD_ID}")
                         // This will push the image to internal registry - for now it saves the image on host
                         docker.withRegistry("${PRIV_REPO}"){
                             backendImage.push('latest')
@@ -96,6 +96,7 @@ pipeline {
                 // Dockerfile is present in the directory to build the frontend
                 script {
                     dir (path: "$WORKSPACE/customer-frontend") {
+                        // Setting the IP of the server
                         sh 'sed -i "s/<serverIP>/${SERVER_IP}/" .env'
                         def frontendImage = docker.build("frontend-api:${BUILD_ID}")
                         // Simple test of made app

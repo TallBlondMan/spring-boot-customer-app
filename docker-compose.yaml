@@ -37,8 +37,6 @@ services:
     image: 10.6.0.243:5000/frontend-api:latest
     # networks:
     #   - app_external
-    environment:
-      - VUE_APP_BASE_URL=http://<serverIP>:8080/api
     ports:
       - 8081:8081
     depends_on:
