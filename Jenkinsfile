@@ -25,6 +25,7 @@ pipeline {
         }
         stage('SonarQube analysis') {
             steps {
+                echo "******************* SonarQube scaner analisys *******************"
                 script{
                     // Run in docker container to not bother with gradle installs
                     docker.image('gradle:8.2-alpine').inside('-u root') {
