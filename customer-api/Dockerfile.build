@@ -1,0 +1,7 @@
+FROM gradle:8.2-alpine
+
+ENV GRADLE_USER_HOME=/gradle/cache
+
+COPY . /app
+WORKDIR /app
+

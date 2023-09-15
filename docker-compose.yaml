@@ -2,9 +2,9 @@ version: '3'
 services:
   app-database:
     image: 10.6.0.243:5000/app-database:latest
-    networks:
-      db_internal:
-       aliases: ["app-database"] 
+    # networks:
+    #   db_internal:
+    #    aliases: ["app-database"] 
     environment:
       - MYSQL_ROOT_PASSWORD=<root_pass>
       - MYSQL_DATABASE=customerdb
@@ -15,15 +15,15 @@ services:
     ports:
       - 3306:3306 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3306"]
+      test: ["CMD", "mysql", "-u$$MYSQL_USER", "-hlocalhost", "-p$$MYSQL_PASSWORD"]
       interval: 10s
       timeout: 5s
       retries: 3
   app-backend:
     image: 10.6.0.243:5000/backend-api:latest
-    networks:
-      - app_external
-      - db_internal
+    # networks:
+    #   - app_external
+    #   - db_internal
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://app-database:3306/customerdb
       - SPRING_DATASOURCE_USERNAME=<db_user>
@@ -35,8 +35,8 @@ services:
       - app-database
   app-frontend:
     image: 10.6.0.243:5000/frontend-api:latest
-    networks:
-      - app_external
+    # networks:
+    #   - app_external
     environment:
       - VUE_APP_BASE_URL=http://<serverIP>:8080/api
     ports:
@@ -47,7 +47,7 @@ services:
 
 volumes:
   database:
-networks:
- db_internal:
-  internal: true
- app_external:
+# networks:
+#  db_internal:
+#   internal: true
+#  app_external:
