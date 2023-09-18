@@ -8,7 +8,9 @@ pipeline {
             DB_USER = credentials('DB_User')
             DB_PASSWD = credentials('DB_password')
             DB_ROOT = credentials('DB_Root_Password')
+            // Idealy this would be a FQDN name :)
             PRIV_REPO = 'https://10.6.0.243:5000'
+            // And this could be added as variable for build
             SERVER_IP = '10.6.0.232'
         }
     stages {
