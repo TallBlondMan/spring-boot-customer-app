@@ -60,7 +60,7 @@ pipeline {
                     echo 'The DB is UP'
                     // Building the image with gradle container
                     // It's supplied with gradle_dep volume for the dependencies to be stored
-                    def buildGrdl = docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + 
+                    docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + 
                                                                 " -v gradle_dep:/gradle/cache" + 
                                                                 " --network temp" + 
                                                                 " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" +  
