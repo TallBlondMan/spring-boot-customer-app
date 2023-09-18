@@ -14,11 +14,6 @@ services:
       - database:/var/lib/mysql
     ports:
       - 3306:3306 
-    healthcheck:
-      test: ["CMD", "mysqladmin", "-hlocalhost", "-u<db_user>", "-p<root_pass>"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
   app-backend:
     image: 10.6.0.243:5000/backend-api:latest
     # networks:
@@ -32,7 +27,8 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - app-database
+      app-database:
+       condition: service_healthy
   app-frontend:
     image: 10.6.0.243:5000/frontend-api:latest
     # networks:
@@ -41,7 +37,6 @@ services:
       - 8081:8081
     depends_on:
       - app-backend
-      - app-database
 
 volumes:
   database:
