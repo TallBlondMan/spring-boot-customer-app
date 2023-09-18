@@ -2,9 +2,8 @@ version: '3'
 services:
   app-database:
     image: 10.6.0.243:5000/app-database:latest
-    # networks:
-    #   db_internal:
-    #    aliases: ["app-database"] 
+    networks:
+      - db_internal
     environment:
       - MYSQL_ROOT_PASSWORD=<root_pass>
       - MYSQL_DATABASE=customerdb
@@ -16,9 +15,9 @@ services:
       - 3306:3306 
   app-backend:
     image: 10.6.0.243:5000/backend-api:latest
-    # networks:
-    #   - app_external
-    #   - db_internal
+    networks:
+      - app_external
+      - db_internal
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://app-database:3306/customerdb
       - SPRING_DATASOURCE_USERNAME=<db_user>
@@ -31,8 +30,8 @@ services:
        condition: service_healthy
   app-frontend:
     image: 10.6.0.243:5000/frontend-api:latest
-    # networks:
-    #   - app_external
+    networks:
+      - app_external
     ports:
       - 8081:8081
     depends_on:
@@ -40,7 +39,6 @@ services:
 
 volumes:
   database:
-# networks:
-#  db_internal:
-#   internal: true
-#  app_external:
+networks:
+ db_internal:
+ app_external:

@@ -1,5 +1,6 @@
 FROM mysql
 COPY create.sql /docker-entrypoint-initdb.d
+EXPOSE 3306
 
 COPY docker-healthcheck.sh docker-healthcheck.sh
 RUN chmod +x docker-healthcheck.sh

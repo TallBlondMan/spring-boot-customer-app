@@ -3,6 +3,8 @@
 # Code from https://github.com/docker-library/healthcheck/blob/master/mysql/docker-healthcheck
 # Modified here and there :)
 #
+
+# Very important - this line ensures the program exits if any of the commands return non 0 status
 set -eo pipefail
 
 if [ "$MYSQL_RANDOM_ROOT_PASSWORD" ] && [ -z "$MYSQL_USER" ] && [ -z "$MYSQL_PASSWORD" ]; then
