@@ -14,4 +14,4 @@ ENV SPRING_DATASOURCE_PASSWORD=
 EXPOSE 8080
 
 # ENTRYPOINT [ "java", "-jar", "app.jar" ]
-CMD [ "script.sh" ]
+CMD [ "./script.sh" ]
