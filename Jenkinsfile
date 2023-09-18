@@ -60,12 +60,13 @@ pipeline {
                     echo 'The DB is UP'
                     // Building the image with gradle container
                     // It's supplied with gradle_dep volume for the dependencies to be stored
-                    docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + 
+                    def buildGrdl = docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + 
                                                                 " -v gradle_dep:/gradle/cache" + 
                                                                 " --network temp" + 
                                                                 " -e SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/customerdb" +  
                                                                 ' -e SPRING_DATASOURCE_USERNAME=$DB_USER' +
                                                                 ' -e SPRING_DATASOURCE_PASSWORD=$DB_PASSWD' +
+                                                                ' --name buildgradle' +
                                                                 ' -u root') {
                         dir (path: "$WORKSPACE/customer-api"){
                             sh 'gradle clean build --info'
@@ -74,6 +75,7 @@ pipeline {
                     // This could be done in post for this stage but it's done at the end if it fails
                     // And I wanted to have a post.global stage
                     dummySQL.stop()
+                    buildGrdl.stop()
                 }
             }
         }
@@ -151,7 +153,7 @@ pipeline {
     post {
         always {
             echo '******************* CLEANING UP *******************'
-            sh 'docker rm -f database'
+            sh 'docker rm -f database buildgradle'
         }
     }
 }
