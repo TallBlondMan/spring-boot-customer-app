@@ -75,7 +75,6 @@ pipeline {
                     // This could be done in post for this stage but it's done at the end if it fails
                     // And I wanted to have a post.global stage
                     dummySQL.stop()
-                    buildGrdl.stop()
                 }
             }
         }
