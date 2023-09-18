@@ -11,7 +11,8 @@ if [ "$MYSQL_RANDOM_ROOT_PASSWORD" ] && [ -z "$MYSQL_USER" ] && [ -z "$MYSQL_PAS
 	exit 0
 fi
 
-host="$(hostname --ip-address || echo '127.0.0.1')"
+# No need for IP address and `hostname` is not native to this container
+host="localhost" 
 user="${MYSQL_USER:-root}"
 export MYSQL_PWD="${MYSQL_PASSWORD:-$MYSQL_ROOT_PASSWORD}"
 
