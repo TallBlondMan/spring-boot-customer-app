@@ -47,6 +47,8 @@ pipeline {
             steps {
                 echo "******************* Building BackEnd *******************"
                 script {
+                    // Environment setup
+                    sh 'docker network create temp'
                     // Start a sidecar MySQL database for Spring tests
                     def dummySQL = docker.image('mysql:latest').run('-e MYSQL_ROOT_PASSWORD=$DB_ROOT' + 
                                                             " -e MYSQL_DATABASE=customerdb" + 
@@ -152,6 +154,7 @@ pipeline {
         always {
             echo '******************* CLEANING UP *******************'
             sh 'docker rm -f database'
+            sh 'docker network rm temp'
 
             echo '******************* GATHERING ARTIFACTS *******************'
             archiveArtifacts artifacts: 'customer-api/build/libs/*.jar', fingerprint: true
