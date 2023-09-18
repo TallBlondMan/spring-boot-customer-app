@@ -152,6 +152,9 @@ pipeline {
         always {
             echo '******************* CLEANING UP *******************'
             sh 'docker rm -f database'
+
+            echo '******************* GATHERING ARTIFACTS *******************'
+            archiveArtifacts artifacts: 'customer-api/build/libs/*.jar', fingerprint: true
         }
     }
 }

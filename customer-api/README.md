@@ -10,5 +10,5 @@
 
 Notes to self
 
-Try running the app without Nginx and move from there
-Maybe the Axios module is causing trouble
+Try running the app without Nginx and move from there - did it, and works
+Maybe the Axios module is causing trouble - No it was CROS origin in Java
