@@ -3,15 +3,19 @@ pipeline {
             // My remote heavy lifting server/agent
             label 'builder'
         }
+        parameters {
+            string(name: 'PRIV_REPO', defaultValue: 'https://10.6.0.243:5000', description: 'Private repo with images')
+            string(name: 'SERVER_IP', defaultValue: '10.6.0.232', description: 'IP of the deployment server')
+        }
         environment {
             // Secret data for DB setup and connection
             DB_USER = credentials('DB_User')
             DB_PASSWD = credentials('DB_password')
             DB_ROOT = credentials('DB_Root_Password')
             // Idealy this would be a FQDN name :)
-            PRIV_REPO = 'https://10.6.0.243:5000'
+            PRIV_REPO = ${params.PRIV_REPO}
             // And this could be added as variable for build
-            SERVER_IP = '10.6.0.232'
+            SERVER_IP = ${params.SERVER_IP}
         }
     stages {
         stage('OWASP') {
