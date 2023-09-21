@@ -66,6 +66,7 @@ pipeline {
                     echo 'The DB is UP'
                     // Building the image with gradle container
                     // It's supplied with gradle_dep volume for the dependencies to be stored
+                    // It speeds up the build process a lot
                     docker.image('gradle:8.2-alpine').inside("-e GRADLE_USER_HOME=/gradle/cache" + 
                                                                 " -v gradle_dep:/gradle/cache" + 
                                                                 " --network temp" + 
@@ -148,7 +149,8 @@ pipeline {
                 sh 'sed -i "s/<db_user>/${DB_USER}/" docker-compose.yaml'
                 sh 'sed -i "s/<db_pass>/${DB_PASSWD}/" docker-compose.yaml'
                 sh 'sed -i "s/<serverIP>/${SERVER_IP}/" docker-compose.yaml'
-
+                // Set the repo for docker-compose
+                sh 'echo REPO=${PRIV_REPO} > .env'
                 // Start the application stack
                 sh 'docker compose up -d --wait'
             }
