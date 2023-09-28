@@ -18,13 +18,26 @@ But you can contract this work to docker as well :D
 
 Also tried to hide as much of the secreets from view so to follow best practices for DevOps with mixed results :)
 
-For Jenkins I've learned:
- - how to write pipelines (stages, tools, credentials, configuration of nodes etc.)
- - utilize Jenkins plugins (BlueOcean, Docker, SonarQube, OWASP)
- - add and manage Clouds and Nodes for Jenkins
- - configure projects
- - manage credentials
+## Features
 
-For Docker:
- - 
+This pipeline incorporates plugins:
+- BlueOcean
+- Docker API 
+- Docker pipeline 
+- OWASP Dependency-Check
+- SonarQube Scanner
+- All the recomended plugins by Jenkins
 
+A private Docker repo was made with [dockerHub/registry](https://hub.docker.com/_/registry) to store the images
+
+SonarQube server has to be installed separately
+
+Jenkins connects to builder via SSH - the keys and account were added prior to both servers(builder and Jenkins-main)
+
+## Configuration
+
+I have 2 parameters that can be set for build
+*SERVER_IP* - IP of deployment server, where the app will be deployed
+*PRIV_REPO* - IP and port of the private repo mentioned before
+
+Also the artifacts that were created durring build are saved on server
