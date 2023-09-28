@@ -36,8 +36,8 @@ Jenkins connects to builder via SSH - the keys and account were added prior to b
 
 ## Configuration
 
-I have 2 parameters that can be set for build
-*SERVER_IP* - IP of deployment server, where the app will be deployed
-*PRIV_REPO* - IP and port of the private repo mentioned before
+I have 2 parameters that can be set for build  
+*SERVER_IP* - IP of deployment server, where the app will be deployed  
+*PRIV_REPO* - IP and port of the private repo mentioned before  
 
 Also the artifacts that were created durring build are saved on server
